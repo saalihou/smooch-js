@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import StripeCheckout from 'react-stripe-checkout';
+import StripeCheckout from '../lib/react-stripe-checkout';
 import { connect } from 'react-redux';
 import bindAll from 'lodash.bindall';
 
@@ -12,6 +12,10 @@ import { getIntegration } from '../utils/app';
 import { LoadingComponent } from './loading';
 
 export class ActionComponent extends Component {
+    static contextTypes= {
+        document: PropTypes.object,
+        hostContext: PropTypes.object
+    };
 
     static propTypes = {
         text: PropTypes.string.isRequired,
@@ -97,6 +101,10 @@ export class ActionComponent extends Component {
 
         return Promise.all(promises);
     }
+    onStripeScriptLoaded = () => {
+        const {hostContext} = this.context;
+        global.StripeCheckout = hostContext.StripeCheckout;
+    };
 
     onStripeClick(e) {
         e.preventDefault();
@@ -114,7 +122,12 @@ export class ActionComponent extends Component {
     }
 
     render() {
+<<<<<<< HEAD
         const {buttonColor, amount, currency, text, uri, type, actionPaymentCompletedText, integrations, stripe, user} = this.props;
+=======
+        const {buttonColor, amount, currency, text, uri, type, actionPaymentCompletedText, integrations, stripe} = this.props;
+        const {document} = this.context;
+>>>>>>> vendor in react-stripe-checkout, swap hostcontext
         const {state} = this.state;
 
         const stripeIntegration = getIntegration(integrations, 'stripeConnect');
@@ -133,14 +146,24 @@ export class ActionComponent extends Component {
             if (state === 'offered') {
                 return <StripeCheckout componentClass='div'
                                        className='sk-action'
+<<<<<<< HEAD
                                        token={ this.onStripeToken }
+=======
+                                       onScriptLoaded={ this.onStripeScriptLoaded }
+                                       token={ this.onStripeToken.bind(this) }
+>>>>>>> vendor in react-stripe-checkout, swap hostcontext
                                        stripeKey={ stripeIntegration.publicKey }
                                        email={ user.email }
                                        amount={ amount }
                                        currency={ currency.toUpperCase() }
                                        name={ stripeAccount.appName }
                                        image={ stripeAccount.iconUrl }
+<<<<<<< HEAD
                                        closed={ this.onStripeClose }>
+=======
+                                       closed={ this.onStripeClose.bind(this) }
+                                       document={ document }>
+>>>>>>> vendor in react-stripe-checkout, swap hostcontext
                            <a className='btn btn-sk-primary'
                               onClick={ this.onStripeClick }
                               style={ style }>
