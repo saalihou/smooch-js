@@ -1,7 +1,3 @@
-if (!global._babelPolyfill) {
-    require('babel-polyfill');
-}
-
 (function() {
     // setPrototypeOf Polyfill for =< IE10
 
